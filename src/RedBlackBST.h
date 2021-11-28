@@ -14,19 +14,17 @@ class RedBlackBST {
   Node<T>* root = nullptr;
 
  public:
-  RedBlackBST<T>(){};
-
   Node<T>* getParent(Node<T>* node) {
     if (node) {
       return node->parent;
     }
-    return node;
+    return nullptr;
   }
 
   Node<T>* getGrandParent(Node<T>* node) { return getParent(getParent(node)); }
+
   Node<T>* getSibling(Node<T>* node) {
     Node<T>* parent = getParent(node);
-    // assert(parent);
     if (parent) {
       if (node == parent->right) {
         return parent->left;
@@ -37,7 +35,37 @@ class RedBlackBST {
     // TODO: Throw an error or return nullptr?
     return nullptr;
   }
-  Node<T>* getUncle(Node<T>* node) {}
+
+  Node<T>* getUncle(Node<T>* node) {
+    // TODO: Throw an error or return nullptr?
+    return getSibling(getParent(node));
+  }
+
+  Node<T>* getNearNephew(Node<T>* node) {
+    Node<T>* parent = getParent(node);
+    Node<T>* sibling = getSibling(node);
+    if (sibling) {
+      if (node == parent->right) {
+        return sibling->right;
+      }
+      return sibling->left;
+    }
+    // TODO: Throw an error or return nullptr?
+    return nullptr;
+  }
+
+  Node<T>* getFarNephew(Node<T>* node) {
+    Node<T>* parent = getParent(node);
+    Node<T>* sibling = getSibling(node);
+    if (sibling) {
+      if (node == parent->right) {
+        return sibling->left;
+      }
+      return sibling->right;
+    }
+    // TODO: Throw an error or return nullptr?
+    return nullptr;
+  }
 };
 
 #endif

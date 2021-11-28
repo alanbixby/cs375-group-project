@@ -4,49 +4,46 @@ B_NUMBER := B00769751
 COURSE := CS375
 CP := 3
 EXECUTABLE := group-project
-WORKING_DIR := $(notdir $(CURDIR))
+WORKING_DIR := src
 TAR_FORMAT := abixby1
 
-# Source Files
-SRC_FILES := ${wildcard src/*.cpp}
-OBJ_FILES := $(subst .cpp,.o,$(SRC_FILES))
-
 # Flags
-CC := g++
-FLAGS := -Wall -Wextra -std=c++17 -g -O3
-LDFLAGS := -lGL -lglut -lpng -lz -lm
+CXXFLAGS := -Wall -Wextra -std=c++17 -O3
+LDFLAGS :=
+LDLIBS :=
 
 # Tar Flags
 TAR_IGNORES := --exclude-vcs --exclude-vcs-ignores --exclude=.vscode --exclude=spec
 
-$(EXECUTABLE): $(SRC_FILES) $(OBJ_FILES)
-		$(CC) $(FLAGS) $(subst .cpp,.o,$(SRC_FILES)) -o $@
-# Update .gitignore to exclude executable name
-# Ignore error if gitignore isnt made (usually tar submission has this excluded- hi TA debugging this error!)
+# Source Files
+SRC_FILES := $(wildcard $(WORKING_DIR)/*.cpp)
+OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
+DEP_FILES := $(patsubst %.cpp,%.d,$(SRC_FILES))
+
+# Makefile Rules
+$(EXECUTABLE): $(OBJ_FILES)
+		$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+# Update .gitignore to exclude executable name; ignore if .gitignore is absent
 		-sed -i "1c $(EXECUTABLE)" .gitignore 2> /dev/null
 
-.cpp.o:
-		$(CC) $(FLAGS) -c $< -o $@
+-include $(DEP_FILES)
+
+%.o: %.cpp
+		$(CXX) $(CXXFLAGS) $(LDFLAGS) -MMD -MP -c $< -o $@ $(LDLIBS)
 
 run: $(EXECUTABLE)
 		./$(EXECUTABLE)
 
-new: rebuild
-		./$(EXECUTABLE)
-
 rebuild: clean $(EXECUTABLE)
-
-memcheck: $(EXECUTABLE)
-		valgrind ./$(EXECUTABLE)
 
 tar: clean
 		cd .. \
-		&& ln -sf $(WORKING_DIR) $(TAR_FORMAT) \
+		&& ln -sf $(notdir $(CURDIR)) $(TAR_FORMAT) \
 		&& tar $(TAR_IGNORES) --dereference -cvzf $(TAR_FORMAT).tar.gz $(TAR_FORMAT) \
-		&& mv $(TAR_FORMAT).tar.gz $(WORKING_DIR)/$(TAR_FORMAT).tar.gz \
-		;  rm $(TAR_FORMAT)
+		&& mv $(TAR_FORMAT).tar.gz $(notdir $(CURDIR))/$(TAR_FORMAT).tar.gz \
+		; rm $(TAR_FORMAT)
 
 clean:
-		rm -f src/*.o $(EXECUTABLE) *.tar.gz
+		rm -f */*.o */*.d $(EXECUTABLE) *.tar.gz
 
-.PHONY: run new rebuild memcheck tar clean
+.PHONY: $(EXECUTABLE) run rebuild tar clean

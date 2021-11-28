@@ -4,7 +4,6 @@
 #include "Color.h"
 #include "RedBlackBST.h"
 
-
 template <class T>
 struct Node {
   Color color = BLACK;
