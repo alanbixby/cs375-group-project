@@ -9,6 +9,7 @@ TAR_FORMAT := abixby1
 
 # Flags
 CXXFLAGS := -Wall -Wextra -std=c++17 -O3
+DEBUG := -DNDEBUG
 LDFLAGS :=
 LDLIBS :=
 
@@ -29,7 +30,7 @@ $(EXECUTABLE): $(OBJ_FILES)
 -include $(DEP_FILES)
 
 %.o: %.cpp
-		$(CXX) $(CXXFLAGS) $(LDFLAGS) -MMD -MP -c $< -o $@ $(LDLIBS)
+		$(CXX) $(CXXFLAGS) $(LDFLAGS) $(DEBUG) -MMD -MP -c $< -o $@ $(LDLIBS)
 
 run: $(EXECUTABLE)
 		./$(EXECUTABLE)
