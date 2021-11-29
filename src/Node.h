@@ -2,7 +2,6 @@
 #define NODE_H
 
 #include "Color.h"
-#include "RedBlackBST.h"
 
 template <class T>
 struct Node {
@@ -10,8 +9,16 @@ struct Node {
   Node<T>* parent = nullptr;
   Node<T>* left = nullptr;
   Node<T>* right = nullptr;
-  T key = NULL;
-  Node<T>(T key) : key(key){};
+  T value = NULL;
+  Node<T>(T value) : value(value){};
+  ~Node<T>() {
+    if (left) {
+      delete left;
+    }
+    if (right) {
+      delete right;
+    }
+  }
 };
 
 #endif

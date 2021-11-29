@@ -9,7 +9,7 @@
 using namespace std;
 
 template <class T>
-class RedBlackBST {
+class RedBlackBST: public BST<T> {
  private:
   Node<T>* root = nullptr;
 
