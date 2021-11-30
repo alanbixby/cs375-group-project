@@ -1,0 +1,3 @@
+Welcome; I'm mid way through the Red-Black tree implementation- I forgot that for insert and delete, you need to call the standard BST operations and then do clean-up, so I opted to just go ahead and implement the normal BST (sorry Ryan).
+
+Insert was started; delete hasn't been touched yet; nor has locks for multi-threaded inserting- feel free to make a branch and tackle that if I don't already get to that.
