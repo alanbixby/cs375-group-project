@@ -4,8 +4,6 @@
 #include "Node.h"
 #include "pdebug.h"
 
-using namespace std;
-
 enum Direction { NIL, LEFT, RIGHT };
 
 template <class T>
@@ -22,7 +20,7 @@ class BST {
       print(node->left);
     }
 
-    cout << node->value << ", ";
+    std::cout << node->value << ", ";
 
     if (node->right) {
       print(node->right);
@@ -37,10 +35,11 @@ class BST {
     }
   };
 
-  void insert(T value) {
+  // Non-void return for RedBlackBST usage.
+  Node<T>* insert(T value) {
     if (root == nullptr) {
       root = new Node<T>(value);
-      return;
+      return root;
     }
     Node<T>* temp = root;
     while (true) {
@@ -50,7 +49,7 @@ class BST {
         } else {
           temp->left = new Node<T>(value);
           temp->left->parent = temp;
-          break;
+          return temp->left;
         }
       } else {
         if (temp->right) {
@@ -58,7 +57,7 @@ class BST {
         } else {
           temp->right = new Node<T>(value);
           temp->right->parent = temp;
-          break;
+          return temp->right;
         }
       }
     }
@@ -151,7 +150,7 @@ class BST {
 
   void print() {
     print(root);
-    cout << endl;
+    std::cout << std::endl;
   }
 };
 

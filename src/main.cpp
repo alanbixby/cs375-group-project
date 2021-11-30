@@ -4,8 +4,6 @@
 #include "BST.h"
 #include "RedBlackBST.h"
 
-using namespace std;
-
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[]) {
   RedBlackBST<int> bst;
   bst.insert(10);

@@ -9,7 +9,7 @@ TAR_FORMAT := abixby1
 
 # Flags
 CXXFLAGS := -Wall -Wextra -std=c++17 -O3
-DEBUG := -DNDEBUG
+DEBUG :=
 LDFLAGS :=
 LDLIBS :=
 
@@ -35,6 +35,8 @@ $(EXECUTABLE): $(OBJ_FILES)
 run: $(EXECUTABLE)
 		./$(EXECUTABLE)
 
+all: rebuild
+
 rebuild: clean $(EXECUTABLE)
 
 tar: clean
@@ -45,6 +47,6 @@ tar: clean
 		; rm $(TAR_FORMAT)
 
 clean:
-		rm -f */*.o */*.d $(EXECUTABLE) *.tar.gz
+		rm -f $(WORKING_DIR)/*.o $(WORKING_DIR)/*.d $(EXECUTABLE) *.tar.gz
 
-.PHONY: $(EXECUTABLE) run rebuild tar clean
+.PHONY: $(EXECUTABLE) all debug run rebuild tar clean
