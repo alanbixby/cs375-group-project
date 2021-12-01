@@ -79,10 +79,10 @@ class BST {
 
   void remove(T value) { remove(find(value)); }
 
-  void remove(Node<T>* node) {
+  Node<T>* remove(Node<T>* node) {
     // Node does not exist
     if (!node) {
-      return;
+      return nullptr;
     }
 
     Direction direction = NIL;
@@ -108,7 +108,7 @@ class BST {
         }
       }
       delete node;
-      return;
+      return nullptr;
     }
 
     // 2 Children
@@ -120,7 +120,7 @@ class BST {
       }
       node->value = temp->value;
       remove(temp);
-      return;
+      return node;
     }
 
     // 1 Child
@@ -145,7 +145,9 @@ class BST {
     node->left = nullptr;
     node->right = nullptr;
 
+    Node<T>* n = node;
     delete node;
+    return n;
   }
 
   void print() {
