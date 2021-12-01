@@ -3,8 +3,13 @@
 
 #include <assert.h>
 
+#include <iostream>
+#include <queue>
+
 #include "Color.h"
 #include "Node.h"
+
+using namespace std;
 
 template <class T>
 class RedBlackBST : public BST<T> {
@@ -56,89 +61,259 @@ class RedBlackBST : public BST<T> {
     return nullptr;
   }
 
-  void rightRotate(Node<T>* Q) {
-    assert(Q);
-    Node<T>* P = Q->left;
-    assert(P);
-    Q->left = P->right;
-    assert(P->right);
-    P->right->parent = Q;
-    P->right = Q;
-    Q->parent = P;
+  void leftRotate(Node<T>* x) {
+    Node<T>* y = x->right;
+    x->right = y->left;
+    if (y->left) {
+      y->left->parent = x;
+    }
+    y->parent = x->parent;
+    if (x->parent == nullptr) {
+      BST<T>::root = y;
+    } else if (x == x->parent->left) {
+      x->parent->left = y;
+    } else {
+      x->parent->right = y;
+    }
+    y->left = x;
+    x->parent = y;
+
+    // pdebug("leftRotate");
+    // assert(node);
+    // Node<T>* child = node->right;
+    // assert(child);
+    // if (child->left) {
+    //   child->left->parent = node;
+    // }
+    // Node<T>* parent = getParent(node);
+    // child->parent = parent;
+    // if (parent == nullptr) {
+    //   BST<T>::root = child;
+    // } else if (node == parent->left) {
+    //   parent->left = child;
+    // } else {
+    //   parent->right = child;
+    // }
+    // child->left = node;
+    // node->parent = child;
   }
 
-  void leftRotate(Node<T>* P) {
-    assert(P);
-    Node<T>* Q = P->right;
-    assert(Q);
-    P->right = Q->left;
-    assert(Q->left);
-    Q->left->parent = P;
-    Q->left = P;
-    P->parent = Q;
+  void rightRotate(Node<T>* x) {
+    assert(x);
+    Node<T>* y = x->left;
+    assert(y);
+    x->left = y->right;
+    if (y->right) {
+      y->right->parent = x;
+    }
+    y->parent = x->parent;
+    if (x->parent == nullptr) {
+      BST<T>::root = y;
+    } else if (x == x->parent->right) {
+      assert(x->parent);
+      x->parent->right = y;
+    } else {
+      assert(x->parent);
+      x->parent->left = y;
+    }
+    y->right = x;
+    x->parent = y;
+
+    // pdebug("rightRotate");
+    // assert(node);
+    // Node<T>* child = node->left;
+    // assert(child);
+    // if (child->right) {
+    //   child->right->parent = node;
+    // }
+    // child->parent = node->parent;
+    // if (node->parent == nullptr) {
+    //   BST<T>::root = child;
+    // } else if (node == node->parent->left) {
+    //   node->parent->left = child;
+    // } else {
+    //   node->parent->right = child;
+    // }
+    // child->right = node;
+    // node->parent = child;
   }
 
  public:
   RedBlackBST<T>() : BST<T>() {}
   Node<T>* insert(T value) {
-    pdebug_val(value);
+    printTree();
+    cout << "inserting " << value << endl;
+    printTree();
+    cout << endl;
+    pdebug("");
     Node<T>* node = BST<T>::insert(value);
+    assert(node);
     if (node == BST<T>::root) {
       return node;
     }
-
-    node->color = RED;
-
-    Node<T>* temp = node;
-    while (temp && temp != BST<T>::root) {
-      Node<T>* parent = getParent(temp);
-      assert(parent);  // Must have a parent if temp != root;
-      if (parent->color == BLACK) {
-        break;
-      }
-
-      Node<T>* uncle = getUncle(temp);
-      assert(uncle);
-      if (uncle->color == RED) {
-        parent->color = BLACK;
-        uncle->color = BLACK;
-        temp = getGrandParent(temp);
-      } else {  // uncle->color == BLACK
-        Node<T>* grandparent = getGrandParent(temp);
-        if (parent == grandparent->left) {
-          if (temp == parent->right) {
-            // Left Right Case
-            // https://media.geeksforgeeks.org/wp-content/cdn-uploads/redBlackCase3b.png
-            // Left Rotate parent
-            // Apply Left Left Case
-            assert(parent == grandparent->left && temp == parent->right);
-            leftRotate(parent);
-          }
-          // Left Left Case
-          rightRotate(grandparent);
+    Node<T>* z = node;
+    assert(z);
+    while (z && z->parent && z->parent->color == RED) {
+      pdebug("while loop");
+      assert(z->parent);
+      assert(z->parent->parent);
+      if (z->parent == z->parent->parent->left) {
+        pdebug("case1");
+        Node<T>* y = z->parent->parent->right;
+        if (y && y->color == RED) {
+          pdebug("case1a");
+          z->parent->color = BLACK;
+          y->color = BLACK;
+          z->parent->parent->color = RED;
+          z = z->parent->parent;
         } else {
-          if (temp == parent->left) {
-            // Right Left Case
-            // https://media.geeksforgeeks.org/wp-content/cdn-uploads/redBlackCase3d.png
-            // Right Rotate parent
-            // Apply Right Right Case
-            assert(parent == grandparent->right && temp == parent->left);
-            rightRotate(parent);
-          } else {
-            // Right Right Case
-            // https://media.geeksforgeeks.org/wp-content/cdn-uploads/redBlackCase3c.png
-            // Left Rotate grandparent
-            // Swap colors of grandparent and parent
-            leftRotate(grandparent);
+          pdebug("case1b");
+          if (z == z->parent->right) {
+            z = z->parent;
+            leftRotate(z);
           }
-          Color gColor = grandparent->color;
-          grandparent->color = parent->color;
-          parent->color = gColor;
+          z->parent->color = BLACK;
+          z->parent->parent->color = RED;
+          rightRotate(z->parent->parent);
         }
-        temp = getParent(temp);
+      } else {
+        pdebug("case2");
+        Node<T>* y = z->parent->parent->left;
+        if (y && y->color == RED) {
+          pdebug("case2a");
+          z->parent->color = BLACK;
+          y->color = BLACK;
+          z->parent->parent->color = RED;
+          z = z->parent->parent;
+        } else {
+          pdebug("case2b");
+          if (z == z->parent->left) {
+            z = z->parent;
+            rightRotate(z);
+          }
+          z->parent->color = BLACK;
+          z->parent->parent->color = RED;
+          leftRotate(z->parent->parent);
+        }
       }
     }
+    pdebug("exiting while loop");
+    assert(BST<T>::root);
+    BST<T>::root->color = BLACK;
     return node;
+
+    // Fix-up Function
+    // assert(getParent(node));
+    // while (getParent(node)->color == RED) {
+    //   Node<T>* parent = getParent(node);
+    //   Node<T>* grandparent = getGrandParent(node);
+    //   assert(grandparent);
+    //   if (parent == grandparent->left) {
+    //     Node<T>* uncle = grandparent->right;
+    //     assert(uncle);
+    //     if (uncle->color == RED) {
+    //       parent->color = BLACK;
+    //       uncle->color = BLACK;
+    //       grandparent->color = RED;
+    //       node = grandparent;
+    //     } else {
+    //       if (node == parent->right) {
+    //         node = parent;
+    //         leftRotate(node);
+    //       }
+    //       rightRotate(getGrandParent(node));
+    //     }
+    //   } else {
+    //     Node<T>* uncle = grandparent->left;
+    //     assert(uncle);
+    //     if (uncle->color == RED) {
+    //       parent->color = BLACK;
+    //       uncle->color = BLACK;
+    //       grandparent->color = RED;
+    //       node = grandparent;
+    //     } else {
+    //       if (node == parent->left) {
+    //         node = parent;
+    //         rightRotate(node);
+    //       }
+    //       leftRotate(getGrandParent(node));
+    //     }
+    //   }
+    //   BST<T>::root->color = BLACK;
+    // if (parent == grandparent->left) {
+    //   Node<T>* uncle = grandparent->right;
+    //   if (!uncle) {
+    //     break;
+    //   }
+    //   assert(uncle);
+    //   if (uncle->color == RED) {
+    //     parent->color = BLACK;
+    //     uncle->color = BLACK;
+    //     grandparent->color = RED;
+    //     node = grandparent;
+    //   } else {
+    //     if (node == parent->right) {
+    //       node = parent;
+    //       // update relatives due to node's change
+    //       parent = getParent(node);
+    //       grandparent = getGrandParent(node);
+    //       leftRotate(node);
+    //     }
+    //     parent->color = BLACK;
+    //     grandparent->color = RED;
+    //     rightRotate(grandparent);
+    //   }
+    // } else {
+    //   Node<T>* uncle = grandparent->left;
+    //   if (!uncle) {
+    //     break;
+    //   }
+    //   assert(uncle);
+    //   if (uncle->color == RED) {
+    //     parent->color = BLACK;
+    //     uncle->color = BLACK;
+    //     grandparent->color = RED;
+    //     node = grandparent;
+    //   } else {
+    //     if (node == parent->left) {
+    //       node = parent;
+    //       // update relatives due to node's change
+    //       parent = getParent(node);
+    //       grandparent = getGrandParent(node);
+    //       rightRotate(node);
+    //     }
+    //     parent->color = BLACK;
+    //     grandparent->color = RED;
+    //     leftRotate(grandparent);
+    //   }
+    // }
+  }
+
+  void printTree() {
+    if (BST<T>::root == nullptr) {
+      return;
+    }
+
+    queue<Node<T>*> q;
+    q.push(BST<T>::root);
+
+    while (!q.empty()) {
+      int count = q.size();
+      while (count > 0) {
+        Node<T>* node = q.front();
+        cout << "\033[" << (node->color ? 39 : 31) << "m" << node->value << " ";
+        q.pop();
+        if (node->left) {
+          q.push(node->left);
+        }
+        if (node->right) {
+          q.push(node->right);
+        }
+        count--;
+      }
+      cout << endl;
+    }
+    cout << "\033[39m" << endl;
   }
 };
 

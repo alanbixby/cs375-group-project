@@ -6,6 +6,9 @@
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[]) {
   RedBlackBST<int> bst;
+  // for (int i = 0; i < 20; i++) {
+  //   bst.insert(i);
+  // }
   bst.insert(10);
   bst.insert(15);
   bst.insert(5);
@@ -17,8 +20,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[]) {
   bst.insert(13);
   bst.insert(11);
   bst.print();
-  bst.remove(12);
+  bst.remove(10);
   bst.print();
+  std::cout << std::endl;
+  bst.printTree();
 }
 
 //    10

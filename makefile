@@ -9,7 +9,7 @@ TAR_FORMAT := abixby1
 
 # Flags
 CXXFLAGS := -Wall -Wextra -std=c++17 -O3
-DEBUG :=
+DEBUG := -DNDEBUG
 LDFLAGS :=
 LDLIBS :=
 
@@ -17,7 +17,7 @@ LDLIBS :=
 TAR_IGNORES := --exclude-vcs --exclude-vcs-ignores --exclude=.vscode --exclude=spec
 
 # Source Files
-SRC_FILES := $(wildcard $(WORKING_DIR)/*.cpp)
+SRC_FILES = $(shell find $(WORKING_DIR)/ -type f -name '*.cpp')
 OBJ_FILES := $(patsubst %.cpp,%.o,$(SRC_FILES))
 DEP_FILES := $(patsubst %.cpp,%.d,$(SRC_FILES))
 
@@ -32,10 +32,15 @@ $(EXECUTABLE): $(OBJ_FILES)
 %.o: %.cpp
 		$(CXX) $(CXXFLAGS) $(LDFLAGS) $(DEBUG) -MMD -MP -c $< -o $@ $(LDLIBS)
 
+debug: 
+	$(MAKE) DEBUG="" rebuild
+
+new: clean run
+
 run: $(EXECUTABLE)
 		./$(EXECUTABLE)
 
-all: rebuild
+all: $(EXECUTABLE)
 
 rebuild: clean $(EXECUTABLE)
 
@@ -47,6 +52,7 @@ tar: clean
 		; rm $(TAR_FORMAT)
 
 clean:
-		rm -f $(WORKING_DIR)/*.o $(WORKING_DIR)/*.d $(EXECUTABLE) *.tar.gz
+		find . -type f -name '*.o' -delete -o -name '*.d' -delete
+		rm -f $(EXECUTABLE) *.tar.gz
 
 .PHONY: $(EXECUTABLE) all debug run rebuild tar clean

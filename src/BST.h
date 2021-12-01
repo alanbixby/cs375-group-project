@@ -20,7 +20,7 @@ class BST {
       print(node->left);
     }
 
-    std::cout << node->value << ", ";
+    std::cout << node->value << " (" <<  node->color << ")" <<", ";
 
     if (node->right) {
       print(node->right);
@@ -35,10 +35,10 @@ class BST {
     }
   };
 
-  // Non-void return for RedBlackBST usage.
+  // Non-void return, and colored insert for RedBlackBST usage.
   Node<T>* insert(T value) {
     if (root == nullptr) {
-      root = new Node<T>(value);
+      root = new Node<T>(value, BLACK);
       return root;
     }
     Node<T>* temp = root;
@@ -47,7 +47,7 @@ class BST {
         if (temp->left) {
           temp = temp->left;
         } else {
-          temp->left = new Node<T>(value);
+          temp->left = new Node<T>(value, RED);
           temp->left->parent = temp;
           return temp->left;
         }
@@ -55,7 +55,7 @@ class BST {
         if (temp->right) {
           temp = temp->right;
         } else {
-          temp->right = new Node<T>(value);
+          temp->right = new Node<T>(value, RED);
           temp->right->parent = temp;
           return temp->right;
         }
