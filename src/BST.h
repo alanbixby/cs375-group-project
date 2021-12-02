@@ -10,7 +10,7 @@ template <class T>
 class BST {
  protected:
   Node<T>* root = nullptr;
-  void remove(Node<T>*);
+  Node<T>* remove(Node<T>*);
 
  public:
   BST<T>(){};
@@ -79,10 +79,10 @@ void BST<T>::remove(T value) {
 }
 
 template <class T>
-void BST<T>::remove(Node<T>* node) {
+Node<T>* BST<T>::remove(Node<T>* node) {
   // Node does not exist
-  if (!node) {
-    return;
+  if (node == nullptr) {
+    return nullptr;
   }
 
   Node<T>* parent = node->parent;
@@ -99,7 +99,7 @@ void BST<T>::remove(Node<T>* node) {
       }
     }
     delete node;
-    return;
+    return nullptr;
   }
 
   // 2 Children
@@ -110,7 +110,7 @@ void BST<T>::remove(Node<T>* node) {
     }
     node->value = temp->value;
     remove(temp);
-    return;
+    return node;
   }
 
   // 1 Child
@@ -133,7 +133,9 @@ void BST<T>::remove(Node<T>* node) {
   node->left = nullptr;
   node->right = nullptr;
 
+  Node<T>* temp = node;
   delete node;
+  return temp;
 }
 
 template <class T>

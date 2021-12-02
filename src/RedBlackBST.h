@@ -11,17 +11,19 @@ class RedBlackBST : public BST<T> {
  private:
   Node<T>* getParent(Node<T>*);
   Node<T>* getGrandParent(Node<T>*);
-  // void remove(Node<T>*); TODO:
+  Node<T>* getSibling(Node<T>*);
+  void remove(Node<T>*);
+  void doubleBlack(Node<T>*);
   void leftRotate(Node<T>*);
   void rightRotate(Node<T>*);
 
  public:
   RedBlackBST<T>() : BST<T>() {}
   void insert(T);
-  // void remove(T); TODO:
-  void inorder(); // Overrides BST<T>::inorder() with colors enabled.
-  void print(); // Overrides BST<T>::print()'s inorder print with level-by-level printing
-    
+  void remove(T);
+  void inorder();  // Overrides BST<T>::inorder() with colors enabled.
+  void print();    // Overrides BST<T>::print()'s inorder print with
+                   // level-by-level printing
 };
 
 template <class T>
@@ -33,8 +35,21 @@ Node<T>* RedBlackBST<T>::getParent(Node<T>* node) {
 }
 
 template <class T>
-Node<T>* RedBlackBST<T>::getGrandParent(Node<T>* node) { 
-  return getParent(getParent(node)); 
+Node<T>* RedBlackBST<T>::getGrandParent(Node<T>* node) {
+  return getParent(getParent(node));
+}
+
+template <class T>
+Node<T>* RedBlackBST<T>::getSibling(Node<T>* node) {
+  Node<T>* parent = getParent(node);
+  if (parent) {
+    if (node == parent->right) {
+      return parent->left;
+    } else {
+      return parent->right;
+    }
+  }
+  return nullptr;
 }
 
 template <class T>
@@ -122,9 +137,99 @@ void RedBlackBST<T>::insert(T value) {
       }
     }
   }
-
   BST<T>::root->color = BLACK;
 }
+
+template <class T>
+void RedBlackBST<T>::remove(T value) {
+  remove(BST<T>::find(value));
+}
+
+template <class T>
+void RedBlackBST<T>::remove(Node<T>* node) {
+  Node<T>* replacement = BST<T>::remove(node);
+  Node<T>* sibling = getSibling(node);
+
+  if (replacement == nullptr) {   // Deleted node was a leaf
+    if (node->color == BLACK)
+      doubleBlack(node);
+    else {
+      if (sibling) {
+        sibling->color = RED;
+      }
+    }
+  } else if (node->color == RED || replacement->color == RED) {   // Simple case of one red
+    replacement->color = BLACK;
+  } else {
+    doubleBlack(replacement);
+  }
+}
+
+template <class T>
+void RedBlackBST<T>::doubleBlack(Node<T>* node) {
+  if (node == BST<T>::root) {
+    return;
+  }
+
+  Node<T>* parent = getParent(node);
+  Node<T>* sibling = getSibling(node);
+
+  if (sibling) {
+    Node<T>* rightNephew = sibling->right;
+    Node<T>* leftNephew = sibling->left;
+    bool redRight = rightNephew && rightNephew->color == RED;
+    bool redLeft = leftNephew && leftNephew->color == RED;
+    bool leftLeft = redLeft && sibling == parent->left;
+    bool rightLeft = redLeft && sibling == parent->right;
+    bool rightRight = redRight && sibling == parent->left;
+    bool leftRight = redRight && sibling == parent->right;
+
+    // Cases 3.2a1 - 3.2b on GeeksForGeeks
+    // https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/
+    if (sibling->color == BLACK) {
+      if (leftLeft) {
+        leftNephew->color = sibling->color;
+        sibling->color = parent->color;
+        rightRotate(parent);
+        parent->color = BLACK;
+      } else if (rightLeft) {
+        leftNephew->color = parent->color;
+        rightRotate(sibling);
+        leftRotate(parent);
+        parent->color = BLACK;
+      } else if (leftRight) {
+        rightNephew->color = parent->color;
+        leftRotate(sibling);
+        rightRotate(parent);
+        parent->color = BLACK;
+      } else if (rightRight) {
+        rightNephew->color = sibling->color;
+        sibling->color = parent->color;
+        leftRotate(parent);
+        parent->color = BLACK;
+      } else {
+        sibling->color = RED;
+        if (parent->color == BLACK) {
+          doubleBlack(parent);
+        } else {
+          parent->color = BLACK;
+        }
+      }
+    }
+    // Case 3.3 on GeeksForGeeks
+    // https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/
+    else {
+      parent->color = RED;
+      sibling->color = BLACK;
+      if (sibling == sibling->parent->right)
+        leftRotate(parent);
+      else
+        rightRotate(parent);
+
+      doubleBlack(node);
+    }
+  }
+};
 
 template <class T>
 void RedBlackBST<T>::inorder() {
