@@ -13,12 +13,8 @@ struct Node {
   Node<T>(T value) : value(value){};
   Node<T>(T value, Color color) : value(value), color(color){};
   ~Node<T>() {
-    if (left) {
-      delete left;
-    }
-    if (right) {
-      delete right;
-    }
+    if (left) delete left;
+    if (right) delete right;
   }
 };
 

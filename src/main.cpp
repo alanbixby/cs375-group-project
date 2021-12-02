@@ -1,14 +1,12 @@
-#include <cassert>
 #include <iostream>
+#include "misc/pdebug.h"
 
 #include "BST.h"
 #include "RedBlackBST.h"
 
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[]) {
-  RedBlackBST<int> bst;
-  // for (int i = 0; i < 20; i++) {
-  //   bst.insert(i);
-  // }
+  RedBlackBST <int>bst;
   bst.insert(10);
   bst.insert(15);
   bst.insert(5);
@@ -20,10 +18,12 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[]) {
   bst.insert(13);
   bst.insert(11);
   bst.print();
-  bst.remove(10);
-  bst.print();
+  bst.inorder();
+  bst.remove(15);
+  bst.remove(7);
   std::cout << std::endl;
-  bst.printTree();
+  bst.print();
+  bst.inorder();
 }
 
 //    10
