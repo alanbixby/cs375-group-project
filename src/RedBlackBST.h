@@ -21,9 +21,9 @@ class RedBlackBST : public BST<T> {
   RedBlackBST<T>() : BST<T>() {}
   void insert(T);
   void remove(T);
+  void print();    // Overrides BST<T>::print()'s inorder print LBL
   void inorder();  // Overrides BST<T>::inorder() with colors enabled.
-  void print();    // Overrides BST<T>::print()'s inorder print with
-                   // level-by-level printing
+  void levelByLevel();
 };
 
 template <class T>
@@ -232,36 +232,18 @@ void RedBlackBST<T>::doubleBlack(Node<T>* node) {
 };
 
 template <class T>
+void RedBlackBST<T>::print() {
+  levelByLevel();
+}
+
+template <class T>
 void RedBlackBST<T>::inorder() {
   BST<T>::inorder(true);
 }
 
 template <class T>
-void RedBlackBST<T>::print() {
-  if (BST<T>::root == nullptr) {
-    return;
-  }
-
-  queue<Node<T>*> q;
-  q.push(BST<T>::root);
-
-  while (!q.empty()) {
-    int count = q.size();
-    while (count > 0) {
-      Node<T>* node = q.front();
-      std::cout << node->color << node->value << " " << Color::BLACK;
-      q.pop();
-      if (node->left) {
-        q.push(node->left);
-      }
-      if (node->right) {
-        q.push(node->right);
-      }
-      count--;
-    }
-    std::cout << std::endl;
-  }
-  std::cout << Color::BLACK;
+void RedBlackBST<T>::levelByLevel() {
+  BST<T>::levelByLevel(true);
 }
 
 #endif

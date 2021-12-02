@@ -1,33 +1,45 @@
 #include <iostream>
-#include "misc/pdebug.h"
 
+// DSA Implementations
 #include "BST.h"
 #include "RedBlackBST.h"
 
+// Helper Functions
+#include "misc/CommandPrompt.h"
+#include "misc/Input.h"
+#include "misc/pdebug.h"
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char const *argv[]) {
-  RedBlackBST <int>bst;
-  bst.insert(10);
-  bst.insert(15);
-  bst.insert(5);
-  bst.insert(12);
-  bst.insert(14);
-  bst.insert(7);
-  bst.insert(6);
-  bst.insert(9);
-  bst.insert(13);
-  bst.insert(11);
-  bst.print();
-  bst.inorder();
-  bst.remove(15);
-  bst.remove(7);
-  std::cout << std::endl;
-  bst.print();
-  bst.inorder();
+// Commands
+#include "misc/commands/Exit.h"
+#include "misc/commands/Add.h"
+#include "misc/commands/Print.h"
+#include "misc/commands/Remove.h"
+
+string executable;
+RedBlackBST<string> bst;
+// BST<string> bst;
+
+int main([[maybe_unused]] int argc, char* argv[]) {
+  executable = argv[0];
+  while (true) {
+    string operation;
+    Input* cmd = promptCommand(2, false);
+    operation = cmd->getOperation();
+    if (operation == "add") {
+      Add::run(cmd);
+    } else if (operation == "remove") {
+      Remove::run(cmd);
+    } else if (operation == "print") {
+      Print::run(cmd);
+    } else if (operation == "exit") {
+      Exit::run(cmd);
+      delete cmd;
+    }
+  }
 }
 
-//    10
-// 5      15
-//  7    12
-// 6 9 11  14
-//        13
+  //    10
+  // 5      15
+  //  7    12
+  // 6 9 11  14
+  //        13

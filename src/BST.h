@@ -2,15 +2,20 @@
 #define BST_H
 
 #include <iostream>
+#include <sstream>
+#include <queue>
 #include <stack>
+#include <utility>
 
 #include "Node.h"
+#include "misc/pdebug.h"
 
 template <class T>
 class BST {
  protected:
   Node<T>* root = nullptr;
   Node<T>* remove(Node<T>*);
+  std::pair<std::string, int> getLevelByLevel(bool color = false);
 
  public:
   BST<T>(){};
@@ -19,8 +24,10 @@ class BST {
   Node<T>* find(T);
   void remove(T);
   Node<T>* getRoot();
-  void inorder(bool color = false);
   void print();
+  void inorder(bool color = false);
+  void levelByLevel(bool color = false);
+  int getHeight();
 };
 
 template <class T>
@@ -144,6 +151,11 @@ Node<T>* BST<T>::getRoot() {
 }
 
 template <class T>
+void BST<T>::print() {
+  levelByLevel();
+}
+
+template <class T>
 void BST<T>::inorder(bool color) {  // Optional bool for RBTree
   stack<Node<T>*> stack;
   Node<T>* node = root;
@@ -166,8 +178,48 @@ void BST<T>::inorder(bool color) {  // Optional bool for RBTree
 }
 
 template <class T>
-void BST<T>::print() {
-  inorder();
+std::pair<std::string, int> BST<T>::getLevelByLevel(bool color) {
+  std::stringstream ss;
+  int height = 0;
+  if (root == nullptr) {
+    return std::make_pair(ss.str(), height);
+  }
+
+  queue<Node<T>*> q;
+  q.push(root);
+
+  while (!q.empty()) {
+    int count = q.size();
+    while (count > 0) {
+      Node<T>* node = q.front();
+      ss << (color ? node->color : Color::BLACK) << node->value << " "
+         << Color::BLACK;
+      q.pop();
+      if (node->left) {
+        q.push(node->left);
+      }
+      if (node->right) {
+        q.push(node->right);
+      }
+      count--;
+    }
+    ss << std::endl;
+    height++;
+  }
+  ss << Color::BLACK;
+  return std::make_pair(ss.str(), height);
+}
+
+template <class T>
+void BST<T>::levelByLevel(bool color) {
+  auto [str, height] = getLevelByLevel(color);
+  cout << str.c_str();
+}
+
+template <class T>
+int BST<T>::getHeight() {
+  auto [str, height] = getLevelByLevel(false);
+  return height;
 }
 
 #endif
