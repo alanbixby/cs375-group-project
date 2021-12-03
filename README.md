@@ -1,3 +1,11 @@
-Welcome; I'm mid way through the Red-Black tree implementation- I forgot that for insert and delete, you need to call the standard BST operations and then do clean-up, so I opted to just go ahead and implement the normal BST (sorry Ryan).
+TODO List:
+- Concurrency?
+- Implement SkipList as name safe functions
+- Quantify tests to compare the algorithms
 
-Insert was started; delete hasn't been touched yet; nor has locks for multi-threaded inserting- feel free to make a branch and tackle that if I don't already get to that.
+In other news, I have a webserver that runs on localhost:3000 can detect and update with the CPP executable.
+
+**Be careful to use `use rbtree int` if you want to insert numbers, otherwise they'll be treated as strings and cause wonky looking trees like this:
+![](https://i.imgur.com/T5f8wOY.png)
+
+It's a completely valid tree, but since it is string sorting, you'll have 4 > 100.

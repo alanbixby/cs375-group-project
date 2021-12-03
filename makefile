@@ -1,7 +1,7 @@
 # Project Information and Contact Details
 GITHUB_ID := alanbixby+rblazej1+sforker1
 COURSE := CS375
-CP := 3
+CP := group-project
 EXECUTABLE_NAME := group-project
 TAR_NAME := $(notdir $(CURDIR))
 TAR_IGNORES := .vscode spec tree-visualizer
