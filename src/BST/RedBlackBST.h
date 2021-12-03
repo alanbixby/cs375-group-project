@@ -148,7 +148,9 @@ void RedBlackBST<T>::remove(T value) {
 
 template <class T>
 void RedBlackBST<T>::remove(Node<T>* node) {
+  pdebug_val(node);
   Node<T>* replacement = BST<T>::remove(node);
+  pdebug_val(replacement);
   Node<T>* sibling = getSibling(node);
 
   if (replacement == nullptr) {   // Deleted node was a leaf
