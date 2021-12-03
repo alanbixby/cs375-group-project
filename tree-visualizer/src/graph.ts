@@ -48,7 +48,7 @@ function nodeToStr<T>(tree: btNode<T>[], key?: T) {
 export default function draw<T>() {
   const json: cppJson<T>[] = JSON.parse(fs.readFileSync('src/treeBuild.json', { encoding: "utf-8" }))
 
-  const withColor: boolean = (json[json.length - 1].style != "BST")
+  const withColor: boolean = (json[json.length - 1]?.style != "BST")
   const root = json.find(node => !node.parent)
 
   //@ts-ignore

@@ -36,7 +36,7 @@
     var y = size * 2;
     var q = [[root, depth, null]];
 
-    if (root.disabled) {
+    if (Object.keys(root).length === 0 || root.disabled) {
       return;
     }
 
@@ -94,7 +94,7 @@
             ctx.fill();
             ctx.fillStyle = "#000";
             ctx.font = "bold " +
-              (size - node.val.length) +
+              (size - node.val?.length) +
               "px Courier New";
             ctx.fillStyle = "#f6f6f6";
             ctx.fillText(node.id, x + 1, y + 1);
