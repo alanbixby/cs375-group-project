@@ -94,7 +94,7 @@
             ctx.fill();
             ctx.fillStyle = "#000";
             ctx.font = "bold " +
-              (size - ("" + node.id).length) +
+              (size - node.val.length) +
               "px Courier New";
             ctx.fillStyle = "#f6f6f6";
             ctx.fillText(node.id, x + 1, y + 1);

@@ -15,6 +15,7 @@ interface cppJson<T> {
   value?: T,
   color?: Color,
   disabled?: boolean,
+  style?: string,
   id: T
 }
 
@@ -47,7 +48,8 @@ function nodeToStr<T>(tree: btNode<T>[], key?: T) {
 export default function draw<T>() {
   const json: cppJson<T>[] = JSON.parse(fs.readFileSync('src/treeBuild.json', { encoding: "utf-8" }))
 
-  let root = json.find(node => !node.parent)
+  const withColor: boolean = (json[json.length - 1].style != "BST")
+  const root = json.find(node => !node.parent)
 
   //@ts-ignore
   const renamed: btNode<T>[] = json.map((node) => {
@@ -56,7 +58,7 @@ export default function draw<T>() {
       val: node.id,
       left: node.left,
       right: node.right,
-      color: node.color,
+      color: withColor ? node.color : "BLACK",
       disabled: node.disabled
     }
   })

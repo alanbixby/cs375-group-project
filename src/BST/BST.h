@@ -185,7 +185,8 @@ string BST<T>::inorder(bool color, bool treeData) {  // Optional bool for RBTree
 
   string output = ss.str();
   if (treeData) {
-    output = "[" + output.substr(0, output.length() - 3) + "]";
+    output = "[" + output.substr(0, output.length() - 3) +
+             (color ? "" : ",\n{ \"style\": \"BST\" }") + "]";
     pdebug_val(output);
   } else {
     cout << output;
