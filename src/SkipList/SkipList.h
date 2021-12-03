@@ -8,15 +8,15 @@ class SkipList {
  private:
   /* data */
  public:
-  SkipList<T>(/* args */){};
+  SkipList<T>(){};
   ~SkipList<T>(){};
   void insert(T){};
   void print(){};
   void inorder(){};
-  int getHeight(){ return 0; };
-  string getBuildString(){ return "[]"; };
-  bool find(T){ return false; };
-  SkipList<T>* remove(T) { return nullptr; };
+  int getHeight() { return 0; };
+  string getBuildString() { return "[{\"disabled\": \"true\"}]"; };
+  bool find(T) { return false; };
+  void remove(T){};
 };
 
 #endif
