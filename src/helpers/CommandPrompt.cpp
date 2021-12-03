@@ -2,11 +2,9 @@
 
 using namespace std;
 
-extern string executable;
-
 vector<string> validCommands = getCommands();
 
-Input* promptCommand(int length = 1, bool concat = false) {
+Input* promptCommand(string executable, int length = 1, bool concat = false) {
   while (true) {
     cout << "[";
     for (int i = 0; i < (int)validCommands.size(); i++) {
@@ -43,7 +41,7 @@ vector<string> getCommands() {
   vector<string> filenames;
   bool hasExit = false;
   bool hasDebug = false;
-  if ((dir = opendir("./src/misc/commands")) != nullptr) {
+  if ((dir = opendir("./src/helpers/commands")) != nullptr) {
     while ((dir_entry = readdir(dir)) != nullptr) {
       if (string(dir_entry->d_name).find(".h") != string::npos) {
         string filename = dir_entry->d_name;
@@ -59,8 +57,10 @@ vector<string> getCommands() {
       }
     }
   }
+  closedir(dir);
   sort(filenames.begin(), filenames.end(), compareFunction);
   if (hasDebug) filenames.push_back("debug");
   if (hasExit) filenames.push_back("exit");
+
   return filenames;
 }

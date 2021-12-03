@@ -38,3 +38,6 @@ spec
 *.exe
 *.out
 *.app
+
+# NodeJS
+node_modules/

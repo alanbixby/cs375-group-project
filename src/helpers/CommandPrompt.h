@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Input* promptCommand(int, bool);
+Input* promptCommand(string, int, bool);
 bool compareFunction(string, string);
 vector<string> getCommands();
 

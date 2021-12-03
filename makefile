@@ -4,7 +4,7 @@ COURSE := CS375
 CP := 3
 EXECUTABLE_NAME := group-project
 TAR_NAME := $(notdir $(CURDIR))
-TAR_IGNORES := .vscode spec
+TAR_IGNORES := .vscode spec tree-visualizer
 
 # Source File Directory
 SOURCES_DIR := src

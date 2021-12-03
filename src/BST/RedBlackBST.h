@@ -24,6 +24,7 @@ class RedBlackBST : public BST<T> {
   void print();    // Overrides BST<T>::print()'s inorder print LBL
   void inorder();  // Overrides BST<T>::inorder() with colors enabled.
   void levelByLevel();
+  string getBuildString();
 };
 
 template <class T>
@@ -244,6 +245,11 @@ void RedBlackBST<T>::inorder() {
 template <class T>
 void RedBlackBST<T>::levelByLevel() {
   BST<T>::levelByLevel(true);
+}
+
+template <class T>
+string RedBlackBST<T>::getBuildString() {
+  return BST<T>::getBuildString(true);
 }
 
 #endif

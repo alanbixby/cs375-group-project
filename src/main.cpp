@@ -1,45 +1,128 @@
+#include <fstream>
 #include <iostream>
-
-// DSA Implementations
-#include "BST.h"
-#include "RedBlackBST.h"
+#include <variant>
 
 // Helper Functions
-#include "misc/CommandPrompt.h"
-#include "misc/Input.h"
-#include "misc/pdebug.h"
+#include "helpers/CLI.h"
+#include "helpers/DataStructure.h"
+#include "helpers/pdebug.h"
 
-// Commands
-#include "misc/commands/Exit.h"
-#include "misc/commands/Add.h"
-#include "misc/commands/Print.h"
-#include "misc/commands/Remove.h"
-
-string executable;
-RedBlackBST<string> bst;
-// BST<string> bst;
+string jsonPath = "./tree-visualizer/src/treeBuild.json";
 
 int main([[maybe_unused]] int argc, char* argv[]) {
-  executable = argv[0];
+  string executable = argv[0];
+  DataStructureEnum dsa = RED_BLACK_TREE;
   while (true) {
-    string operation;
-    Input* cmd = promptCommand(2, false);
-    operation = cmd->getOperation();
-    if (operation == "add") {
-      Add::run(cmd);
-    } else if (operation == "remove") {
-      Remove::run(cmd);
-    } else if (operation == "print") {
-      Print::run(cmd);
-    } else if (operation == "exit") {
-      Exit::run(cmd);
-      delete cmd;
+    pdebug_val(dsa);
+    switch (dsa) {
+      case BINARY_SEARCH_TREE: {
+        auto bst = new BST<string>();
+        cout << "Initialized an unbalanced BST.\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(bst, executable, jsonPath, true);
+          if (temp && temp != BINARY_SEARCH_TREE) {
+            delete bst;
+            CLI::clearJson(jsonPath);
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!" << endl << endl;
+          }
+        }
+        break;
+      }
+
+      case BINARY_SEARCH_TREE_INT: {
+        auto bst_int = new BST<int>();
+        cout << "Initialized an unbalanced BST [INT].\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(bst_int, executable, jsonPath, true);
+          if (temp && temp != BINARY_SEARCH_TREE_INT) {
+            delete bst_int;
+            CLI::clearJson(jsonPath);
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!" << endl << endl;
+          }
+        }
+        break;
+      }
+
+      case RED_BLACK_TREE: {
+        auto rbtree = new RedBlackBST<string>();
+        cout << "Initialized a balanced Red Black BST.\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(rbtree, executable, jsonPath, true);
+          if (temp && temp != RED_BLACK_TREE) {
+            delete rbtree;
+            CLI::clearJson(jsonPath);
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!" << endl << endl;
+          }
+        }
+        break;
+      }
+
+      case RED_BLACK_TREE_INT: {
+        auto rbtree_int = new RedBlackBST<int>();
+        cout << "Initialized a balanced Red Black BST [INT].\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(rbtree_int, executable, jsonPath, true);
+          if (temp && temp != RED_BLACK_TREE_INT) {
+            delete rbtree_int;
+            CLI::clearJson(jsonPath);
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!" << endl << endl;
+          }
+        }
+        break;
+      }
+
+      case SKIP_LIST: {
+        auto skiplist = new SkipList<int>();
+        cout << "Initialized a SkipList.\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(skiplist, executable, jsonPath);
+          if (temp && temp != SKIP_LIST) {
+            delete skiplist;
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!\n" << endl;
+          }
+        }
+        break;
+      }
+
+      case SKIP_LIST_INT: {
+        auto skiplist_int = new SkipList<int>();
+        cout << "Initialized a SkipList [INT].\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(skiplist_int, executable, jsonPath);
+          if (temp && temp != SKIP_LIST_INT) {
+            delete skiplist_int;
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!" << endl << endl;
+          }
+        }
+        break;
+      }
+
+      case NONE:
+        assert(false && "NONE");
     }
   }
 }
-
-  //    10
-  // 5      15
-  //  7    12
-  // 6 9 11  14
-  //        13

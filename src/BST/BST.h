@@ -2,13 +2,14 @@
 #define BST_H
 
 #include <iostream>
-#include <sstream>
+#include <iterator>
 #include <queue>
+#include <sstream>
 #include <stack>
 #include <utility>
 
+#include "../helpers/pdebug.h"
 #include "Node.h"
-#include "misc/pdebug.h"
 
 template <class T>
 class BST {
@@ -25,8 +26,9 @@ class BST {
   void remove(T);
   Node<T>* getRoot();
   void print();
-  void inorder(bool color = false);
+  string inorder(bool color = false, bool data = false);
   void levelByLevel(bool color = false);
+  string getBuildString(bool color = false);
   int getHeight();
 };
 
@@ -129,12 +131,12 @@ Node<T>* BST<T>::remove(Node<T>* node) {
   }
 
   child->parent = parent;
-  if (node == parent->left) {
+  if (parent == nullptr) {
+    root = child;
+  } else if (node == parent->left) {
     parent->left = child;
   } else if (node == parent->right) {
     parent->right = child;
-  } else {
-    root = child;
   }
 
   node->left = nullptr;
@@ -156,10 +158,11 @@ void BST<T>::print() {
 }
 
 template <class T>
-void BST<T>::inorder(bool color) {  // Optional bool for RBTree
+string BST<T>::inorder(bool color, bool treeData) {  // Optional bool for RBTree
   stack<Node<T>*> stack;
   Node<T>* node = root;
 
+  stringstream ss;
   while (node || !stack.empty()) {
     while (node) {
       stack.push(node);
@@ -169,12 +172,25 @@ void BST<T>::inorder(bool color) {  // Optional bool for RBTree
     node = stack.top();
     stack.pop();
 
-    cout << (color ? node->color : Color::BLACK) << node->value << " "
+    if (treeData) {
+      ss << *node << ",\n";
+    } else {
+      ss << (color ? node->color : Color::BLACK) << node->value << " "
          << Color::BLACK;
+    }
 
     node = node->right;
   }
-  cout << endl;
+  ss << endl;
+
+  string output = ss.str();
+  if (treeData) {
+    output = "[" + output.substr(0, output.length() - 3) + "]";
+    pdebug_val(output);
+  } else {
+    cout << output;
+  }
+  return output;
 }
 
 template <class T>
@@ -220,6 +236,11 @@ template <class T>
 int BST<T>::getHeight() {
   auto [str, height] = getLevelByLevel(false);
   return height;
+}
+
+template <class T>
+string BST<T>::getBuildString(bool color) {
+  return inorder(color, true);
 }
 
 #endif
