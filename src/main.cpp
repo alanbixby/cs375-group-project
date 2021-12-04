@@ -11,7 +11,8 @@ string jsonPath = "./tree-visualizer/src/treeBuild.json";
 
 int main([[maybe_unused]] int argc, char* argv[]) {
   string executable = argv[0];
-  DataStructureEnum dsa = RED_BLACK_TREE;
+  DataStructureEnum dsa = RED_BLACK_TREE_INT;
+  cout << endl;
   while (true) {
     pdebug_val(dsa);
     switch (dsa) {

@@ -16,12 +16,12 @@ app.get('*', function (req, res) {
     </head>
     <body>
       <h1 style="margin:auto">Binary Tree Visualizer</h1>
-      <img src="${draw().toDataURL()}" style="display:block;margin-left:auto;margin-right:auto">
+      <img id="tree" src="${draw().toDataURL()}" style="display:block;margin-left:auto;margin-right:auto">
       <script src="/socket.io/socket.io.js"></script>
       <script>
       const socket = io();
-      socket.on('fileChanged', () => {
-          location.reload();
+      socket.on('fileChanged', (png) => {
+          document.getElementById("tree").src=png;
       });
       </script>
     </body>
@@ -32,5 +32,5 @@ io.on('connection', () => {});
 server.listen(3000);
 
 fs.watchFile('src/treeBuild.json', { interval: 500 }, (curr, prev) => {
-  io.emit('fileChanged');
+  io.emit('fileChanged', draw().toDataURL());
 });

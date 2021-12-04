@@ -24,7 +24,7 @@ void run(Input* command, D<T> *tree) {
         tree->insert(i);
         cout << "Added " << i << endl;
       } catch (...) {
-        cout << "[!] " << value << "is not a number" << endl;
+        cout << "[!] " << value << " is not a number" << endl;
       }
     } else {
       tree->insert(value);

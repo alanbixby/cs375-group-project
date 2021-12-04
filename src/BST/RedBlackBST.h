@@ -46,7 +46,7 @@ Node<T>* RedBlackBST<T>::getSibling(Node<T>* node) {
   if (parent) {
     if (node == parent->right) {
       return parent->left;
-    } else {
+    } else if (node == parent->left) {
       return parent->right;
     }
   }
@@ -153,7 +153,7 @@ void RedBlackBST<T>::remove(Node<T>* node) {
   pdebug_val(replacement);
   Node<T>* sibling = getSibling(node);
 
-  if (replacement == nullptr) {   // Deleted node was a leaf
+  if (replacement == nullptr) {  // Deleted node was a leaf
     if (node->color == BLACK)
       doubleBlack(node);
     else {
@@ -161,7 +161,8 @@ void RedBlackBST<T>::remove(Node<T>* node) {
         sibling->color = RED;
       }
     }
-  } else if (node->color == RED || replacement->color == RED) {   // Simple case of one red
+  } else if (node->color == RED ||
+             replacement->color == RED) {  // Simple case of one red
     replacement->color = BLACK;
   } else {
     doubleBlack(replacement);
@@ -176,8 +177,7 @@ void RedBlackBST<T>::doubleBlack(Node<T>* node) {
 
   Node<T>* parent = getParent(node);
   Node<T>* sibling = getSibling(node);
-
-  if (sibling) {
+  if (sibling != nullptr) {
     Node<T>* rightNephew = sibling->right;
     Node<T>* leftNephew = sibling->left;
     bool redRight = rightNephew && rightNephew->color == RED;
@@ -224,11 +224,11 @@ void RedBlackBST<T>::doubleBlack(Node<T>* node) {
     else {
       parent->color = RED;
       sibling->color = BLACK;
-      if (sibling == sibling->parent->right)
+      if (sibling == sibling->parent->right) {
         leftRotate(parent);
-      else
+      } else {
         rightRotate(parent);
-
+      }
       doubleBlack(node);
     }
   }
