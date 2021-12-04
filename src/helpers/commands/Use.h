@@ -32,8 +32,8 @@ DataStructureEnum run(Input* command) {
     return SKIP_LIST;
   } else {
     cout << "  error: Invalid command. Usage:" << endl;
-    cout << "  error:    use bst" << endl;
-    cout << "  error:    use rbtree" << endl;
+    cout << "  error:    use bst <?int>" << endl;
+    cout << "  error:    use rbtree <?int>" << endl;
     cout << "  error:    use skiplist" << endl;
   }
   cout << endl;

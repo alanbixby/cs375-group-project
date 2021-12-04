@@ -13,7 +13,7 @@ using namespace std;
 
 namespace Print {
 template <template <typename> class D, typename T>
-void run(Input* command, D<T> *tree) {
+void run(Input* command, D<T>* tree) {
   cout << endl;
   string style = command->getArg(1);
   if (style == "") {
