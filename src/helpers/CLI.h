@@ -6,7 +6,7 @@
 // DSA Implementations
 #include "../BST/BST.h"
 #include "../BST/RedBlackBST.h"
-#include "../SkipList/SkipList.h"
+#include "../SkipList/Map.h"
 
 // Helper Functions
 #include "../helpers/CommandPrompt.h"
@@ -19,9 +19,6 @@
 #include "../helpers/commands/Print.h"
 #include "../helpers/commands/Remove.h"
 #include "../helpers/commands/Use.h"
-
-//Timer for measuring function time
-//typedef std::chrono::high_resolution_clock Clock;
 
 namespace CLI {
 void clearJson(string writeJson) {
@@ -41,7 +38,6 @@ DataStructureEnum run(D<T>* dsa, string executable, string jsonPath = "",
     string operation;
     Input* cmd = promptCommand(executable, 2, false);
     operation = cmd->getOperation();
-    //auto startTime = Clock::now();
     if (operation == "add") {
       Add::run(cmd, dsa);
     } else if (operation == "remove") {
@@ -57,10 +53,7 @@ DataStructureEnum run(D<T>* dsa, string executable, string jsonPath = "",
       clearJson(jsonPath);
       Exit::run(cmd, dsa);
     }
-    
-    //auto endTime = Clock::now();
-    
-    //cout << operation << " executed in " << std::chrono::duration_cast<std::chrono::nanoseconds>(endTime - startTime).count() << " nanoseconds." << endl;
+
     if (writeJson) {
       pdebug_val(jsonPath);
       ofstream treeJson;

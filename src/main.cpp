@@ -12,6 +12,20 @@ string jsonPath = "./tree-visualizer/treeBuild.json";
 using namespace std;
 
 int main([[maybe_unused]] int argc, char* argv[]) {
+  // stringstream ss;
+  // RedBlackBST<int> bst;
+  // int count = 0;
+  // for (int i = 0; i < 25000; i++) {
+  //   bst.insert(i);
+  //   ss << ++count << ", " << bst.getHeight() << ", " << i << endl;
+  // }
+
+  // ofstream test;
+  // test.open("tests/rbbst-increasing.csv");
+  // test << ss.str();
+  // test.close();
+  // exit(0);
+
   string executable = argv[0];
   DataStructureEnum dsa = RED_BLACK_TREE_INT;
   cout << endl;
@@ -91,7 +105,7 @@ int main([[maybe_unused]] int argc, char* argv[]) {
       }
 
       case SKIP_LIST: {
-        auto skiplist = new SkipList<int>();
+        SkipList<string>* skiplist = new SkipList<string>();
         cout << "Initialized a SkipList.\n" << endl;
         while (true) {
           DataStructureEnum temp = NONE;
@@ -107,22 +121,22 @@ int main([[maybe_unused]] int argc, char* argv[]) {
         break;
       }
 
-      case SKIP_LIST_INT: {
-        auto skiplist_int = new SkipList<int>();
-        cout << "Initialized a SkipList [INT].\n" << endl;
-        while (true) {
-          DataStructureEnum temp = NONE;
-          temp = CLI::run(skiplist_int, executable, jsonPath);
-          if (temp && temp != SKIP_LIST_INT) {
-            delete skiplist_int;
-            dsa = temp;
-            break;
-          } else {
-            cout << "Already in use!" << endl << endl;
-          }
-        }
-        break;
-      }
+        // case SKIP_LIST_INT: {
+        //   SkipList<int, int>* skiplist_int = new SkipList<int, int>();
+        //   cout << "Initialized a SkipList [INT].\n" << endl;
+        //   while (true) {
+        //     DataStructureEnum temp = NONE;
+        //     temp = CLI::run(skiplist_int, executable, jsonPath);
+        //     if (temp && temp != SKIP_LIST_INT) {
+        //       delete skiplist_int;
+        //       dsa = temp;
+        //       break;
+        //     } else {
+        //       cout << "Already in use!" << endl << endl;
+        //     }
+        //   }
+        //   break;
+        // }
 
       case NONE:
         assert(false && "NONE");

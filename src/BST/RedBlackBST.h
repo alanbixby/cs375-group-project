@@ -153,7 +153,7 @@ void RedBlackBST<T>::remove(Node<T>* node) {
   pdebug_val(replacement);
   Node<T>* sibling = getSibling(node);
 
-  if (replacement == nullptr) {  // Deleted node was a leaf
+  if (replacement == nullptr) {
     if (node->color == BLACK)
       doubleBlack(node);
     else {
@@ -161,8 +161,7 @@ void RedBlackBST<T>::remove(Node<T>* node) {
         sibling->color = RED;
       }
     }
-  } else if (node->color == RED ||
-             replacement->color == RED) {  // Simple case of one red
+  } else if (node->color == RED || replacement->color == RED) {
     replacement->color = BLACK;
   } else {
     doubleBlack(replacement);
@@ -187,8 +186,6 @@ void RedBlackBST<T>::doubleBlack(Node<T>* node) {
     bool rightRight = redRight && sibling == parent->left;
     bool leftRight = redRight && sibling == parent->right;
 
-    // Cases 3.2a1 - 3.2b on GeeksForGeeks
-    // https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/
     if (sibling->color == BLACK) {
       if (leftLeft) {
         leftNephew->color = sibling->color;
@@ -218,10 +215,7 @@ void RedBlackBST<T>::doubleBlack(Node<T>* node) {
           parent->color = BLACK;
         }
       }
-    }
-    // Case 3.3 on GeeksForGeeks
-    // https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/
-    else {
+    } else {
       parent->color = RED;
       sibling->color = BLACK;
       if (sibling == sibling->parent->right) {
