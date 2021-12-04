@@ -7,7 +7,9 @@
 #include "helpers/DataStructure.h"
 #include "helpers/pdebug.h"
 
-string jsonPath = "./tree-visualizer/src/treeBuild.json";
+string jsonPath = "./tree-visualizer/treeBuild.json";
+
+using namespace std;
 
 int main([[maybe_unused]] int argc, char* argv[]) {
   string executable = argv[0];

@@ -1,6 +1,7 @@
 import express from 'express'
 import http from 'http'
 import fs from 'fs'
+import path from 'path'
 
 import draw from './graph'
 
@@ -16,7 +17,7 @@ app.get('*', function (req, res) {
     </head>
     <body>
       <h1 style="margin:auto">Binary Tree Visualizer</h1>
-      <img id="tree" src="${draw().toDataURL()}" style="display:block;margin-left:auto;margin-right:auto">
+      <img id="tree" src="${draw().toDataURL()}" style="display:block;margin-left:auto;margin-right:auto;width=90%">
       <script src="/socket.io/socket.io.js"></script>
       <script>
       const socket = io();
@@ -28,9 +29,11 @@ app.get('*', function (req, res) {
     `);
 });
 
-io.on('connection', () => {});
-server.listen(3000);
+io.on('connection', () => { });
+server.listen(3000, () => {
+  console.log("Listening on http://localhost:3000");
+});
 
-fs.watchFile('src/treeBuild.json', { interval: 500 }, (curr, prev) => {
+fs.watchFile(path.join(__dirname, '../treeBuild.json'), { interval: 500 }, (curr, prev) => {
   io.emit('fileChanged', draw().toDataURL());
 });
