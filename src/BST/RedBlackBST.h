@@ -143,7 +143,12 @@ void RedBlackBST<T>::insert(T value) {
 
 template <class T>
 void RedBlackBST<T>::remove(T value) {
-  remove(BST<T>::find(value));
+  Node<T>* node = BST<T>::find(value);
+  if (node) {
+    remove(node);
+  } else {
+    throw std::out_of_range("Could not find value");
+  }
 }
 
 template <class T>
