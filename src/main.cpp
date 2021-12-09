@@ -1,6 +1,5 @@
 #include <fstream>
 #include <iostream>
-#include <variant>
 
 // Helper Functions
 #include "helpers/CLI.h"
@@ -12,19 +11,13 @@ string jsonPath = "./tree-visualizer/treeBuild.json";
 using namespace std;
 
 int main([[maybe_unused]] int argc, char* argv[]) {
-  // stringstream ss;
-  // RedBlackBST<int> bst;
-  // int count = 0;
-  // for (int i = 0; i < 25000; i++) {
-  //   bst.insert(i);
-  //   ss << ++count << ", " << bst.getHeight() << ", " << i << endl;
-  // }
-
-  // ofstream test;
-  // test.open("tests/rbbst-increasing.csv");
-  // test << ss.str();
-  // test.close();
-  // exit(0);
+  // SkipList<string> test;
+  // test.insert("5");
+  // test.insert("16");
+  // test.insert("12");
+  // test.remove("16");
+  // test.print();
+  // exit(1);
 
   string executable = argv[0];
   DataStructureEnum dsa = RED_BLACK_TREE_INT;
@@ -37,7 +30,7 @@ int main([[maybe_unused]] int argc, char* argv[]) {
         cout << "Initialized an unbalanced BST.\n" << endl;
         while (true) {
           DataStructureEnum temp = NONE;
-          temp = CLI::run(bst, executable, jsonPath, true);
+          temp = CLI::run(bst, executable, jsonPath);
           if (temp && temp != BINARY_SEARCH_TREE) {
             delete bst;
             CLI::clearJson(jsonPath);
@@ -55,7 +48,7 @@ int main([[maybe_unused]] int argc, char* argv[]) {
         cout << "Initialized an unbalanced BST [INT].\n" << endl;
         while (true) {
           DataStructureEnum temp = NONE;
-          temp = CLI::run(bst_int, executable, jsonPath, true);
+          temp = CLI::run(bst_int, executable, jsonPath);
           if (temp && temp != BINARY_SEARCH_TREE_INT) {
             delete bst_int;
             CLI::clearJson(jsonPath);
@@ -73,7 +66,7 @@ int main([[maybe_unused]] int argc, char* argv[]) {
         cout << "Initialized a balanced Red Black BST.\n" << endl;
         while (true) {
           DataStructureEnum temp = NONE;
-          temp = CLI::run(rbtree, executable, jsonPath, true);
+          temp = CLI::run(rbtree, executable, jsonPath);
           if (temp && temp != RED_BLACK_TREE) {
             delete rbtree;
             CLI::clearJson(jsonPath);
@@ -91,7 +84,7 @@ int main([[maybe_unused]] int argc, char* argv[]) {
         cout << "Initialized a balanced Red Black BST [INT].\n" << endl;
         while (true) {
           DataStructureEnum temp = NONE;
-          temp = CLI::run(rbtree_int, executable, jsonPath, true);
+          temp = CLI::run(rbtree_int, executable, jsonPath);
           if (temp && temp != RED_BLACK_TREE_INT) {
             delete rbtree_int;
             CLI::clearJson(jsonPath);
@@ -112,6 +105,7 @@ int main([[maybe_unused]] int argc, char* argv[]) {
           temp = CLI::run(skiplist, executable, jsonPath);
           if (temp && temp != SKIP_LIST) {
             delete skiplist;
+            CLI::clearJson(jsonPath);
             dsa = temp;
             break;
           } else {
@@ -121,22 +115,23 @@ int main([[maybe_unused]] int argc, char* argv[]) {
         break;
       }
 
-        // case SKIP_LIST_INT: {
-        //   SkipList<int, int>* skiplist_int = new SkipList<int, int>();
-        //   cout << "Initialized a SkipList [INT].\n" << endl;
-        //   while (true) {
-        //     DataStructureEnum temp = NONE;
-        //     temp = CLI::run(skiplist_int, executable, jsonPath);
-        //     if (temp && temp != SKIP_LIST_INT) {
-        //       delete skiplist_int;
-        //       dsa = temp;
-        //       break;
-        //     } else {
-        //       cout << "Already in use!" << endl << endl;
-        //     }
-        //   }
-        //   break;
-        // }
+      case SKIP_LIST_INT: {
+        SkipList<string>* skiplist = new SkipList<string>(true); // janky solution ftw
+        cout << "Initialized a SkipList [INT].\n" << endl;
+        while (true) {
+          DataStructureEnum temp = NONE;
+          temp = CLI::run(skiplist, executable, jsonPath);
+          if (temp && temp != SKIP_LIST_INT) {
+            delete skiplist;
+            CLI::clearJson(jsonPath);
+            dsa = temp;
+            break;
+          } else {
+            cout << "Already in use!\n" << endl;
+          }
+        }
+        break;
+      }
 
       case NONE:
         assert(false && "NONE");

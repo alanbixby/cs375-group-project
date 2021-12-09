@@ -3,7 +3,7 @@ GITHUB_ID := alanbixby+rblazej1+sforker1
 COURSE := CS375
 CP := group-project
 EXECUTABLE_NAME := group-project
-TAR_NAME := $(notdir $(CURDIR))
+TAR_NAME := projectpack
 TAR_IGNORES := .vscode spec tree-visualizer
 
 # Source File Directory
@@ -18,7 +18,7 @@ LDLIBS :=
 DEBUG := -DNDEBUG
 
 # Tar Flags
-TAR_IGNORES := --exclude-vcs --exclude-vcs-ignores $(addprefix --exclude=, $(TAR_IGNORES))
+TAR_IGNORES := --exclude-vcs-ignores $(addprefix --exclude=, $(TAR_IGNORES))
 
 # Source Files
 SRC_FILES = $(shell find $(SOURCES_DIR)/ -type f -name '*.cpp')
@@ -49,9 +49,9 @@ run: $(EXECUTABLE_NAME)
 rebuild: clean $(EXECUTABLE_NAME)
 
 tar: clean
+		cd .. \
 		&& ln -sf $(notdir $(CURDIR)) $(TAR_NAME) \
-		&& tar $(TAR_FLAGS) --dereference -cvzf $(TAR_NAME).tar.gz $(TAR_NAME) \
-		cd .. \	
+		&& tar $(TAR_IGNORES) --dereference -cvzf $(TAR_NAME).tar.gz $(TAR_NAME) \
 		&& mv $(TAR_NAME).tar.gz $(notdir $(CURDIR))/$(TAR_NAME).tar.gz \
 		; rm $(TAR_NAME)
 

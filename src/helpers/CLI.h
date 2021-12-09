@@ -26,14 +26,13 @@ void clearJson(string writeJson) {
     ofstream treeJson;
     treeJson.open(writeJson);
     pdebug("");
-    treeJson << "[{\"disabled\": \"true\"}]";
+    treeJson << "{\n\"data\": [],\n\"style\": \"Disabled\"\n}";
     treeJson.close();
   }
 }
 
 template <template <typename> class D, typename T>
-DataStructureEnum run(D<T>* dsa, string executable, string jsonPath = "",
-                      bool writeJson = false) {
+DataStructureEnum run(D<T>* dsa, string executable, string jsonPath = "") {
   while (true) {
     string operation;
     Input* cmd = promptCommand(executable, 2, false);
@@ -54,13 +53,11 @@ DataStructureEnum run(D<T>* dsa, string executable, string jsonPath = "",
       Exit::run(cmd, dsa);
     }
 
-    if (writeJson) {
-      pdebug_val(jsonPath);
-      ofstream treeJson;
-      treeJson.open(jsonPath);
-      treeJson << dsa->getBuildString();
-      treeJson.close();
-    }
+    pdebug_val(jsonPath);
+    ofstream treeJson;
+    treeJson.open(jsonPath);
+    treeJson << dsa->getBuildString();
+    treeJson.close();
   }
 }
 

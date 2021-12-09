@@ -29,11 +29,10 @@ void run(Input* command, D<T>* tree) {
     } else {
       key = (T)value;
     }
-    bool success = tree->find(key);
-    if (success) {
-      cout << "Removed " << key << endl;
+    try {
       tree->remove(key);
-    } else {
+      cout << "Removed " << key << endl;
+    } catch (...) {
       cout << "Couldn't find " << value << endl;
     }
   } else {

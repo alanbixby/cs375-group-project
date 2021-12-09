@@ -13,7 +13,8 @@ enum DataStructureEnum {
   RED_BLACK_TREE,
   SKIP_LIST,
   BINARY_SEARCH_TREE_INT,
-  RED_BLACK_TREE_INT
+  RED_BLACK_TREE_INT,
+  SKIP_LIST_INT
 };
 
 #endif

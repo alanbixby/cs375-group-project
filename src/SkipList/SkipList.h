@@ -2,18 +2,25 @@
 #define SKIPLIST_H
 
 #include <iostream>
+#include <sstream>
 
-#include "Map.h"
 #include "../helpers/pdebug.h"
+#include "Map.h"
 
 using namespace std;
 
 template <class T>
 struct SkipList : public Map<string, string> {
+  int fakeInt = false;
   SkipList<T>() : Map<string, string>(){};
+  SkipList<T>(bool fakeInt) : Map<string, string>(), fakeInt(fakeInt){};
   ~SkipList<T>(){};
 
   void insert(string value) {
+    if (fakeInt) {
+      stoi(value);
+      value.insert(value.begin(), 11 - value.length(), '0');
+    }
     Map<string, string>::insert({{value}, {value}});
   };
 
@@ -21,6 +28,10 @@ struct SkipList : public Map<string, string> {
 
   bool find(string value) {
     try {
+      if (fakeInt) {
+        stoi(value);
+        value.insert(value.begin(), 11 - value.length(), '0');
+      }
       auto item = *Map<string, string>::find(value);
       return true;
     } catch (...) {
@@ -29,18 +40,20 @@ struct SkipList : public Map<string, string> {
   };
 
   void remove(string value) {
-    try {
-      Map<string, string>::erase(value);
-    } catch (...) {
-      cout << "";
+    if (fakeInt) {
+      stoi(value);
+      value.insert(value.begin(), 11 - value.length(), '0');
     }
+    Map<string, string>::erase(value);
   };
 
   void print() { levelByLevel(); };
 
   void inorder() {
     for (auto it = begin(); it != end(); ++it) {
-      cout << std::get<0>(*(it)) << " ";
+      string output = get<0>(*(it));
+      output.erase(0, output.find_first_not_of('0'));
+      cout << output << " ";
     }
     cout << endl;
   };
@@ -51,7 +64,9 @@ struct SkipList : public Map<string, string> {
       cout << "Level " << i << ": ";
       while (node != nullptr) {
         if (node->key != nullptr) {
-          cout << std::get<0>(*(node->key)) << " ";
+          string output = get<0>(*(node->key));
+          output.erase(0, output.find_first_not_of('0'));
+          cout << output << " ";
         }
         node = node->next[i];
       }
@@ -64,22 +79,29 @@ struct SkipList : public Map<string, string> {
     for (int i = 0; i <= currLevel; i++) {
       SLNode *node = head->next[i];
       stringstream temp;
-      temp << "{ \"level\": " << i << ", \"set\": [";
-      bool isEmpty = true;
+      temp << "[";
       while (node != nullptr) {
         if (node->key != nullptr) {
-          temp << "\"" << std::get<0>(*(node->key)) << "\", ";
-          isEmpty = false;
+          string output = get<0>(*(node->key));
+          output.erase(0, output.find_first_not_of('0'));
+          if (fakeInt) {
+            temp << output << ", ";
+          } else {
+            temp << "\"" << output << "\""
+                 << ", ";
+          }
         }
         node = node->next[i];
       }
       string levelJson = temp.str();
-      levelJson = levelJson.substr(0, levelJson.length() - 2) + (isEmpty ? " [" : "") + "] },\n";
+      levelJson = levelJson.substr(0, levelJson.length() - 2) + "],\n";
       ss << levelJson;
     }
 
     string output = ss.str();
-    output = "[" + output.substr(0, output.length() - 0) + "{ \"style\": \"SkipList\" }]";
+    output = "{ \"data\": [\n" + output.substr(0, output.length() - 2) +
+             "\n],\n" + "\"style\": \"SkipList\", \n\"type\": \"" +
+             (fakeInt ? "number" : "string") + "\"}";
     pdebug_val(output);
     return output;
   }

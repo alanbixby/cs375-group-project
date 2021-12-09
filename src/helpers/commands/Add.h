@@ -27,8 +27,12 @@ void run(Input* command, D<T> *tree) {
         cout << "[!] " << value << " is not a number" << endl;
       }
     } else {
-      tree->insert(value);
-      cout << "Added " << value << endl;
+      try {
+        tree->insert(value);
+        cout << "Added " << value << endl;
+      } catch (...) {
+        cout << "[!] " << value << " is not a number" << endl; // More jank to support int SkipList
+      }
     }
   } else {
     cout << "  error: Invalid command. Usage:" << endl;

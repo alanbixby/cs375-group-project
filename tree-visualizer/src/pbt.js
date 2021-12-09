@@ -46,7 +46,7 @@
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.strokeStyle = "#666";
+    ctx.strokeStyle = "#5e5e5e";
     ctx.lineWidth = 8;
 
     while (depth >= 0) {
@@ -85,11 +85,11 @@
             ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.arc(x + 1, y + 1, size - 2, 0, 2 * Math.PI);
-            ctx.stroke();
+            // ctx.stroke();
             if (node.color == "RED") {
-              ctx.fillStyle = "red";
+              ctx.fillStyle = "#c92525";
             } else {
-              ctx.fillStyle = "black";
+              ctx.fillStyle = "#1a1a1a";
             }
             ctx.fill();
             ctx.fillStyle = "#000";

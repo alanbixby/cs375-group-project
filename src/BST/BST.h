@@ -84,7 +84,12 @@ Node<T>* BST<T>::find(T key) {
 
 template <class T>
 void BST<T>::remove(T value) {
-  remove(find(value));
+  Node<T>* node = find(value);
+  if (node) {
+    remove(node);
+  } else {
+    throw std::out_of_range("Could not find value");
+  }
 }
 
 template <class T>
@@ -185,8 +190,7 @@ string BST<T>::inorder(bool color, bool treeData) {  // Optional bool for RBTree
 
   string output = ss.str();
   if (treeData) {
-    output = "[" + output.substr(0, output.length() - 3) +
-             (color ? "" : ",\n{ \"style\": \"BST\" }") + "]";
+    output = "{\n\"data\": [" + output.substr(0, output.length() - 3) + "],\n\"style\": \"" + (color ? "RedBlackBST" : "BST") + "\"\n}";
     pdebug_val(output);
   } else {
     cout << output;

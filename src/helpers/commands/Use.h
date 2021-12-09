@@ -29,6 +29,9 @@ DataStructureEnum run(Input* command) {
     }
     return RED_BLACK_TREE;
   } else if (structure == "skiplist" || structure == "skip") {
+    if (type == "number" || type == "int") {
+      return SKIP_LIST_INT;
+    }
     return SKIP_LIST;
   } else {
     cout << "  error: Invalid command. Usage:" << endl;
